@@ -1,8 +1,6 @@
 # ML-4-Finance
 ENSAE Course
 
-#ML-4-Finance-
-
 
 This repo covers the Machine Learning for finance course assignement provided at ENSAE. A report and a notebook were written for the project. 
 
