@@ -5,6 +5,8 @@ import math
 
 from tensorflow import keras
 from scipy.stats import norm
+import scipy.stats as stats
+
 from numpy.polynomial.hermite import hermgauss
 
 import matplotlib.pyplot as plt
