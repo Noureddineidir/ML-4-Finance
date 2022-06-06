@@ -16,7 +16,7 @@ from src.highway_network import HighwayLayer
 from src.data_generators import DPDEGenerator, DPDEGeneratorDelta
 from src.train_models import transform_ab_to_cd, transform_to_logprice, transform_to_time, normalise_logprice, normalise_time, transform_to_riskfree_rate, transform_to_volatility, transform_to_correlation, normalise_riskfree_rate, normalise_correlation
 from src. train_models import DPDEModel, DPDEModelGreeks
-from src.evaluation_function import decompose_covariance_matrix, one_dimensional_exact_solution, exact_solution, get_random_points_of_interest, get_points_for_plot_at_fixed_time, localisation
+from src.evaluation_function import decompose_covariance_matrix, one_dimensional_exact_solution, exact_solution, get_random_points_of_interest, get_points_for_plot_at_fixed_time, localisation, Implied_Volatility, Implied_Volatility_bis
 
 np.random.seed(42)
 
@@ -134,3 +134,6 @@ if __name__ == "__main__":
 
         model.fit(x=batch_generator, epochs=nr_epochs, steps_per_epoch=10,
                               callbacks=[callback])
+
+    # plot code are available on notebook
+    

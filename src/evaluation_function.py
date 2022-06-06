@@ -159,3 +159,44 @@ def localisation(t, s1, s2, riskfree_rate=riskfree_rate_eval):
                     np.exp(localisation_parameter * (
                         0.5*(s1+s2) - np.exp(-riskfree_rate*t)*strike_price))
                     )
+
+# Using the generalization of Implied Vol for 2 or more assets
+
+import scipy.stats as stats
+
+def BS_Call(S,T,r,sigma,K):
+  d_1 = (np.log(S/K) + (r+sigma**2/2)*T)/(sigma*np.sqrt(T))
+  d_2 = d_1 - sigma * np.sqrt(T)
+  return(S*stats.norm.cdf(d_1)-K*np.exp(-r*T)*stats.norm.cdf(d_2))
+
+def BS_Vega_Call(S,K,T,r,sigma):
+  d_1 = (np.log(S/K) + (r+sigma**2/2)*T)/(sigma*np.sqrt(T))
+  return S * np.sqrt(T)*stats.norm.pdf(d_1)
+
+# To compute the implied_volatility, we use Newton-Raphson method
+def Implied_Volatility(Price,S,K,r,T):
+  try:
+    Implied_vol = 0.5
+    Target = 10**(-4)
+    Keep_computing = True
+    while Keep_computing:
+      aux = Implied_vol
+      Implied_vol = Implied_vol - (BS_Call(S,T,r,Implied_vol,K) - Price)/BS_Vega_Call(S,K,T,r,Implied_vol)
+      if abs(BS_Call(S,T,r,Implied_vol,K) - Price) < Target:
+        Keep_computing = False
+    return(Implied_vol)
+  except:
+    return(Implied_Volatility_bis(Price,S,K,r,T))
+
+def Implied_Volatility_bis(Price,S,K,r,T):
+  Implied_vol = 0.9
+  for i in range(2,8):
+    if BS_Call(S,T,r,Implied_vol,K) - Price > 0:
+      while BS_Call(S,T,r,Implied_vol,K) - Price > 0:
+        Implied_vol = Implied_vol - 10**(-i)
+    else:
+      while BS_Call(S,T,r,Implied_vol,K) - Price < 0:
+        Implied_vol = Implied_vol + 10**(-i)
+  if Implied_vol < 0.05:
+    print(Implied_vol,Price,BS_Call(S,T,r,Implied_vol,K),S,K,r,T)
+  return(Implied_vol)
